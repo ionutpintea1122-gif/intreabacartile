@@ -609,7 +609,36 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = 'https://theirjnbasxmfiexiqou.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_E0f-T4R6QbEMfITSHwKt2g_gM5rkKXE';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let userActual = null;
+let sedinteProfil = 0;
+
+async function initAuth() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+        window.location.href = 'cont.html?redirect=sedinta.html' + window.location.search.replace('?','&');
+        return;
+    }
+    userActual = session.user;
+
+    const { data: profil } = await sb.from('profiluri').select('sedinte').eq('id', userActual.id).single();
+    sedinteProfil = profil ? profil.sedinte : 0;
+    rotiriRamase = sedinteProfil;
+
+    updateRotiri();
+
+    if (rotiriRamase <= 0) {
+        document.getElementById('blocat-overlay').classList.add('activ');
+        document.getElementById('interpreta-btn').disabled = true;
+    }
+}
+
 const CATEGORII = {
     dragoste: { icon: '💗', titlu: 'Dragoste', context: 'dragoste, relații, sentimente' },
     bani: { icon: '✨', titlu: 'Bani', context: 'finanțe, abundență, prosperitate' },
@@ -705,9 +734,9 @@ const CARTI_TAROT = [
 
 let cartiTrase = [];
 let categorieActiva = 'destin';
-let rotiriRamase = 999;
+let rotiriRamase = 0;
 
-// Init
+// Init categorie
 const params = new URLSearchParams(window.location.search);
 const cat = params.get('categorie') || 'destin';
 categorieActiva = CATEGORII[cat] ? cat : 'destin';
@@ -716,18 +745,19 @@ const catData = CATEGORII[categorieActiva];
 document.getElementById('cat-icon').textContent = catData.icon;
 document.getElementById('cat-title').textContent = catData.titlu;
 
-// Rotiri
 function updateRotiri() {
     const el = document.getElementById('rotiri-text');
-    el.textContent = 'Ședințe nelimitate în perioada de test';
+    if (rotiriRamase === 0) {
+        el.textContent = 'Nicio ședință disponibilă';
+    } else if (rotiriRamase === 1) {
+        el.textContent = '1 ședință disponibilă';
+    } else {
+        el.textContent = rotiriRamase + ' ședințe disponibile';
+    }
 }
-updateRotiri();
 
-// Verificare rotiri
-if (rotiriRamase <= 0) {
-    document.getElementById('blocat-overlay').classList.add('activ');
-    document.getElementById('interpreta-btn').disabled = true;
-}
+// Pornire cu autentificare Supabase
+initAuth();
 
 // Tragere carte
 function trageCartea(nr) {
@@ -1153,17 +1183,20 @@ function interpreteaza() {
     document.getElementById('loading').classList.add('activ');
 
     // Simulam o mica intarziere pentru efect mistic
-    setTimeout(() => {
+    setTimeout(async () => {
         const text = genereazaInterpretare(carta1, carta2, carta3, categorieActiva, intrebare);
 
         document.getElementById('loading').classList.remove('activ');
         document.getElementById('interpretare-text').textContent = text;
         document.getElementById('interpretare-box').classList.add('activ');
 
-        // Scade rotiri
-        rotiriRamase = Math.max(0, rotiriRamase - 1);
-        localStorage.setItem('rotiri', rotiriRamase);
-        updateRotiri();
+        // Scade sedinta in Supabase
+        if (userActual) {
+            const nouNr = Math.max(0, rotiriRamase - 1);
+            await sb.from('profiluri').update({ sedinte: nouNr }).eq('id', userActual.id);
+            rotiriRamase = nouNr;
+            updateRotiri();
+        }
 
         if (rotiriRamase <= 0) {
             setTimeout(() => {
