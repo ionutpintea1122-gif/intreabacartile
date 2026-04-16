@@ -148,8 +148,9 @@ async function register() {
         btn.disabled = false; btn.textContent = '✦ Creează Cont ✦';
     } else {
         mesaj.className='mesaj succes';
-        mesaj.textContent='✅ Cont creat! Verifică emailul pentru confirmare, apoi autentifică-te.';
+        mesaj.textContent='✅ Cont creat cu succes! Te poți autentifica acum.';
         btn.disabled = false; btn.textContent = '✦ Creează Cont ✦';
+        setTimeout(() => schimbaTab('login'), 2000);
     }
 }
 
