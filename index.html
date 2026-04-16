@@ -551,12 +551,10 @@
 <nav>
     <a href="index.html" class="nav-logo">Întreabă<span>Cărțile</span></a>
     <ul class="nav-links">
-        <li><a href="despre-noi.html">Despre Noi</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="abonament.html" class="nav-btn">Abonament</a></li>
-        <li id="nav-login"><a href="login.html" class="nav-btn">Intră</a></li>
+        <li><a href="abonament.html">Pachete</a></li>
+        <li id="nav-login"><a href="cont.html" class="nav-btn">Contul Meu</a></li>
         <li id="nav-user" style="display:none;">
-            <span id="nav-username" style="color:var(--gold); font-family:'Cinzel',serif; font-size:0.78rem; letter-spacing:2px;"></span>
+            <a href="profil.html" style="color:var(--gold); font-family:'Cinzel',serif; font-size:0.78rem; letter-spacing:2px; text-decoration:none;" id="nav-username"></a>
             <button onclick="logout()" style="background:transparent; border:1px solid #555; color:#888; padding:6px 14px; border-radius:2px; cursor:pointer; font-size:0.72rem; letter-spacing:1px; margin-left:12px;">Ieși</button>
         </li>
     </ul>
@@ -637,25 +635,41 @@
             <span class="pachet-rotiri">10</span>
             <span class="pachet-label">Ședințe</span>
             <span class="pachet-pret">30 lei</span>
-            <button class="pachet-btn" onclick="window.location.href='login.html'">Alege</button>
+            <button class="pachet-btn" onclick="window.location.href='abonament.html?pachet=10'">Alege</button>
         </div>
         <div class="pachet popular">
             <div class="pachet-badge">Popular</div>
             <span class="pachet-rotiri">20</span>
             <span class="pachet-label">Ședințe</span>
             <span class="pachet-pret">50 lei</span>
-            <button class="pachet-btn" onclick="window.location.href='login.html'">Alege</button>
+            <button class="pachet-btn" onclick="window.location.href='abonament.html?pachet=20'">Alege</button>
         </div>
     </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-    <p>© 2026 IntreabaCártile.ro — Toate drepturile rezervate</p>
-    <a href="contact.html">Contact</a>
+    <p>© 2026 IntreabăCărțile.ro — Toate drepturile rezervate</p>
+    <a href="abonament.html">Pachete</a>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+    const sb = supabase.createClient('https://theirjnbasxmfiexiqou.supabase.co', 'sb_publishable_E0f-T4R6QbEMfITSHwKt2g_gM5rkKXE');
+
+    sb.auth.getSession().then(({ data }) => {
+        if (data.session) {
+            document.getElementById('nav-login').style.display = 'none';
+            document.getElementById('nav-user').style.display = 'flex';
+            document.getElementById('nav-username').textContent = data.session.user.email.split('@')[0];
+        }
+    });
+
+    async function logout() {
+        await sb.auth.signOut();
+        window.location.reload();
+    }
+
     // Generare stele
     const starsContainer = document.getElementById('stars');
     for (let i = 0; i < 150; i++) {
