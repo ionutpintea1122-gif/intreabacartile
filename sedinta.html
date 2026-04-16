@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ședința — IntreabăCărțile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #e8c96a;
+            --gold-dim: rgba(201,168,76,0.15);
+            --dark: #0a0806;
+            --dark2: #100e0b;
+            --dark3: #1a1712;
+            --text: #f0e6c8;
+            --text-dim: #8a7a5a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark);
+            color: var(--text);
+            font-family: 'Crimson Text', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--d, 3s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            opacity: var(--op, 0.6);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: var(--op, 0.6); }
+            50% { opacity: 0.1; }
+        }
+
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            height: 64px;
+            background: rgba(10,8,6,0.95);
+            border-bottom: 1px solid rgba(201,168,76,0.1);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .nav-logo span { color: var(--text); }
+
+        .nav-back {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-back:hover { color: var(--gold); }
+
+        /* MAIN */
+        .sedinta-wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 100px 20px 60px;
+        }
+
+        /* HEADER CATEGORIE */
+        .categorie-header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeUp 0.8s ease both;
+        }
+
+        .categorie-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 16px rgba(201,168,76,0.4));
+        }
+
+        .categorie-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+
+        .categorie-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--gold);
+        }
+
+        /* ROTIRI */
+        .rotiri-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(201,168,76,0.08);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-top: 12px;
+        }
+
+        /* INTREBARE */
+        .intrebare-section {
+            margin-bottom: 40px;
+            animation: fadeUp 0.8s ease both;
+            animation-delay: 0.2s;
+        }
+
+        .intrebare-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .intrebare-input {
+            width: 100%;
+            background: rgba(201,168,76,0.03);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 4px;
+            padding: 16px 20px;
+            color: var(--text);
+            font-family: 'Crimson Text', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s;
+            height: 100px;
+        }
+
+        .intrebare-input:focus {
+            border-color: var(--gold);
+        }
+
+        .intrebare-input::placeholder {
+            color: var(--text-dim);
+            opacity: 0.6;
+        }
+
+        /* CARTI DE TRAS */
+        .tragere-section {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeUp 0.8s ease both;
+            animation-delay: 0.4s;
+        }
+
+        .tragere-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        .carti-de-tras {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .carta-de-tras {
+            width: 100px;
+            height: 165px;
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 8px;
+            background: linear-gradient(135deg, #1a1408 0%, #0d0b07 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .carta-de-tras::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 4px,
+                rgba(201,168,76,0.025) 4px,
+                rgba(201,168,76,0.025) 8px
+            );
+        }
+
+        .carta-de-tras:not(.trasa):hover {
+            transform: translateY(-8px);
+            border-color: rgba(201,168,76,0.5);
+            box-shadow: 0 16px 40px rgba(201,168,76,0.15);
+        }
+
+        .carta-de-tras .spatele {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 6px rgba(201,168,76,0.3));
+        }
+
+        .carta-de-tras .fata {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carta-de-tras.trasa {
+            cursor: default;
+            border-color: var(--gold);
+            animation: cardFlip 0.6s ease forwards;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .carta-de-tras.trasa .spatele { display: none; }
+        .carta-de-tras.trasa .fata { display: flex; }
+
+        .fata-img {
+            width: 100%;
+            flex: 1;
+            object-fit: cover;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .fata-nume {
+            font-family: 'Cinzel', serif;
+            font-size: 0.52rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-align: center;
+            padding: 6px 4px;
+            background: rgba(10,8,6,0.95);
+            width: 100%;
+            border-radius: 0 0 6px 6px;
+        }
+
+        @keyframes cardFlip {
+            0% { transform: rotateY(90deg) scale(0.8); opacity: 0; }
+            100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+        }
+
+        .tragere-hint {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* BUTON INTERPRETARE */
+        .interpreta-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            padding: 18px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 32px;
+            animation: fadeUp 0.8s ease both;
+            animation-delay: 0.6s;
+        }
+
+        .interpreta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--gold);
+            transition: left 0.4s;
+            z-index: -1;
+        }
+
+        .interpreta-btn:hover { color: var(--dark); }
+        .interpreta-btn:hover::before { left: 0; }
+        .interpreta-btn:disabled {
+            border-color: #333;
+            color: #444;
+            cursor: not-allowed;
+        }
+        .interpreta-btn:disabled::before { display: none; }
+
+        /* LOADING */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.activ { display: block; }
+
+        .loading-orb {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            border: 2px solid rgba(201,168,76,0.1);
+            border-top-color: var(--gold);
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* INTERPRETARE */
+        .interpretare-box {
+            display: none;
+            background: rgba(201,168,76,0.04);
+            border: 1px solid rgba(201,168,76,0.25);
+            border-radius: 8px;
+            padding: 36px;
+            animation: fadeUp 0.8s ease both;
+        }
+
+        .interpretare-box.activ { display: block; }
+
+        .interpretare-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(201,168,76,0.1);
+        }
+
+        .interpretare-header span {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .interpretare-text {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: var(--text);
+            font-style: italic;
+            white-space: pre-line;
+        }
+
+        /* BLOCAT */
+        .blocat-overlay {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: rgba(201,168,76,0.03);
+            border: 1px solid rgba(201,168,76,0.15);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .blocat-overlay.activ { display: block; }
+
+        .blocat-overlay h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--gold);
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .blocat-overlay p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .pachete-mini {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .pachet-mini {
+            border: 1px solid rgba(201,168,76,0.3);
+            border-radius: 4px;
+            padding: 20px 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .pachet-mini:hover {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.07);
+        }
+
+        .pachet-mini .pm-rotiri {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            color: var(--gold);
+            display: block;
+        }
+
+        .pachet-mini .pm-pret {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--text);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .pachet-mini .pm-label {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* NOUA SEDINTA */
+        .noua-btn {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: var(--text-dim);
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            width: 100%;
+        }
+
+        .noua-btn:hover { color: var(--gold); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            nav { padding: 0 20px; }
+            .carti-de-tras { gap: 10px; }
+            .carta-de-tras { width: 80px; height: 135px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav>
+    <a href="index.html" class="nav-logo">Întreabă<span>Cărțile</span></a>
+    <a href="index.html" class="nav-back">← Înapoi</a>
+</nav>
+
+<div class="sedinta-wrap">
+
+    <!-- HEADER CATEGORIE -->
+    <div class="categorie-header">
+        <span class="categorie-icon" id="cat-icon">🔮</span>
+        <p class="categorie-label">Ședință de tarot</p>
+        <h1 class="categorie-title" id="cat-title">Destin</h1>
+        <div class="rotiri-badge">
+            <span>🕯️</span>
+            <span id="rotiri-text">2 ședințe gratuite rămase</span>
+        </div>
+    </div>
+
+    <!-- INTREBARE -->
+    <div class="intrebare-section">
+        <span class="intrebare-label">🖊 Întrebarea ta</span>
+        <textarea class="intrebare-input" id="intrebare" placeholder="Scrie ce te frământă... cărțile ascultă."></textarea>
+    </div>
+
+    <!-- TRAGERE CARTI -->
+    <div class="tragere-section">
+        <span class="tragere-label">🃏 Trage 3 cărți</span>
+        <div class="carti-de-tras">
+            <div class="carta-de-tras" id="carta-1" onclick="trageCartea(1)">
+                <span class="spatele">✦</span>
+                <div class="fata">
+                    <img class="fata-img" id="img-1" src="" alt="">
+                    <span class="fata-nume" id="nume-1"></span>
+                </div>
+            </div>
+            <div class="carta-de-tras" id="carta-2" onclick="trageCartea(2)">
+                <span class="spatele">✦</span>
+                <div class="fata">
+                    <img class="fata-img" id="img-2" src="" alt="">
+                    <span class="fata-nume" id="nume-2"></span>
+                </div>
+            </div>
+            <div class="carta-de-tras" id="carta-3" onclick="trageCartea(3)">
+                <span class="spatele">✦</span>
+                <div class="fata">
+                    <img class="fata-img" id="img-3" src="" alt="">
+                    <span class="fata-nume" id="nume-3"></span>
+                </div>
+            </div>
+        </div>
+        <p class="tragere-hint" id="tragere-hint">Apasă pe fiecare carte pentru a o întoarce</p>
+    </div>
+
+    <!-- BUTON INTERPRETARE -->
+    <button class="interpreta-btn" id="interpreta-btn" onclick="interpreteaza()" disabled>
+        ✦ Revelează Interpretarea ✦
+    </button>
+
+    <!-- LOADING -->
+    <div class="loading" id="loading">
+        <div class="loading-orb"></div>
+        <p>Cărțile vorbesc...</p>
+    </div>
+
+    <!-- INTERPRETARE -->
+    <div class="interpretare-box" id="interpretare-box">
+        <div class="interpretare-header">
+            <span>🔮</span>
+            <span>Interpretarea cărților tale</span>
+        </div>
+        <div class="interpretare-text" id="interpretare-text"></div>
+        <button class="noua-btn" onclick="resetSedinta()">✦ Nouă ședință ✦</button>
+    </div>
+
+    <!-- BLOCAT -->
+    <div class="blocat-overlay" id="blocat-overlay">
+        <h3>Ședințele gratuite s-au terminat</h3>
+        <p>Continuă călătoria ta spirituală cu un pachet de ședințe.</p>
+        <div class="pachete-mini">
+            <div class="pachet-mini" onclick="window.location.href='abonament.html?pachet=10'">
+                <span class="pm-rotiri">10</span>
+                <span class="pm-label">ședințe</span>
+                <span class="pm-pret">30 lei</span>
+            </div>
+            <div class="pachet-mini" onclick="window.location.href='abonament.html?pachet=20'">
+                <span class="pm-rotiri">20</span>
+                <span class="pm-label">ședințe</span>
+                <span class="pm-pret">50 lei</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const CATEGORII = {
+    dragoste: { icon: '💗', titlu: 'Dragoste', context: 'dragoste, relații, sentimente' },
+    bani: { icon: '✨', titlu: 'Bani', context: 'finanțe, abundență, prosperitate' },
+    sanatate: { icon: '🌿', titlu: 'Sănătate', context: 'sănătate, echilibru, vindecare' },
+    cariera: { icon: '⚡', titlu: 'Carieră', context: 'carieră, muncă, succes profesional' },
+    destin: { icon: '🔮', titlu: 'Destin', context: 'destin, viitor, drum de viață' }
+};
+
+const CARTI_TAROT = [
+    { img: 'major_arcana_fool.jpg',        nume: 'Nebunul' },
+    { img: 'major_arcana_magician.jpg',    nume: 'Magicianul' },
+    { img: 'major_arcana_priestess.jpg',   nume: 'Înalta Preoteasă' },
+    { img: 'major_arcana_empress.jpg',     nume: 'Împărăteasa' },
+    { img: 'major_arcana_emperor.jpg',     nume: 'Împăratul' },
+    { img: 'major_arcana_hierophant.jpg',  nume: 'Papa' },
+    { img: 'major_arcana_lovers.jpg',      nume: 'Îndrăgostiții' },
+    { img: 'major_arcana_chariot.jpg',     nume: 'Carul' },
+    { img: 'major_arcana_strength.jpg',    nume: 'Forța' },
+    { img: 'major_arcana_hermit.jpg',      nume: 'Ermitul' },
+    { img: 'major_arcana_fortune.jpg',     nume: 'Roata Fortunei' },
+    { img: 'major_arcana_justice.jpg',     nume: 'Dreptatea' },
+    { img: 'major_arcana_hanged.jpg',      nume: 'Spânzuratul' },
+    { img: 'major_arcana_death.jpg',       nume: 'Moartea' },
+    { img: 'major_arcana_temperance.jpg',  nume: 'Temperanța' },
+    { img: 'major_arcana_devil.jpg',       nume: 'Diavolul' },
+    { img: 'major_arcana_tower.jpg',       nume: 'Turnul' },
+    { img: 'major_arcana_star.jpg',        nume: 'Steaua' },
+    { img: 'major_arcana_moon.jpg',        nume: 'Luna' },
+    { img: 'major_arcana_sun.jpg',         nume: 'Soarele' },
+    { img: 'major_arcana_judgement.jpg',   nume: 'Judecata' },
+    { img: 'major_arcana_world.jpg',       nume: 'Lumea' },
+    { img: 'minor_arcana_cups_ace.jpg',    nume: 'Asul de Cupe' },
+    { img: 'minor_arcana_cups_2.jpg',      nume: '2 de Cupe' },
+    { img: 'minor_arcana_cups_3.jpg',      nume: '3 de Cupe' },
+    { img: 'minor_arcana_cups_5.jpg',      nume: '5 de Cupe' },
+    { img: 'minor_arcana_cups_6.jpg',      nume: '6 de Cupe' },
+    { img: 'minor_arcana_cups_7.jpg',      nume: '7 de Cupe' },
+    { img: 'minor_arcana_cups_8.jpg',      nume: '8 de Cupe' },
+    { img: 'minor_arcana_cups_9.jpg',      nume: '9 de Cupe' },
+    { img: 'minor_arcana_cups_10.jpg',     nume: '10 de Cupe' },
+    { img: 'minor_arcana_cups_page.jpg',   nume: 'Paj de Cupe' },
+    { img: 'minor_arcana_cups_knight.jpg', nume: 'Cavaler de Cupe' },
+    { img: 'minor_arcana_cups_queen.jpg',  nume: 'Regina de Cupe' },
+    { img: 'minor_arcana_cups_king.jpg',   nume: 'Regele de Cupe' },
+    { img: 'minor_arcana_pentacles_ace.jpg',    nume: 'Asul de Pentacole' },
+    { img: 'minor_arcana_pentacles_2.jpg',      nume: '2 de Pentacole' },
+    { img: 'minor_arcana_pentacles_3.jpg',      nume: '3 de Pentacole' },
+    { img: 'minor_arcana_pentacles_4.jpg',      nume: '4 de Pentacole' },
+    { img: 'minor_arcana_pentacles_5.jpg',      nume: '5 de Pentacole' },
+    { img: 'minor_arcana_pentacles_6.jpg',      nume: '6 de Pentacole' },
+    { img: 'minor_arcana_pentacles_7.jpg',      nume: '7 de Pentacole' },
+    { img: 'minor_arcana_pentacles_8.jpg',      nume: '8 de Pentacole' },
+    { img: 'minor_arcana_pentacles_9.jpg',      nume: '9 de Pentacole' },
+    { img: 'minor_arcana_pentacles_10.jpg',     nume: '10 de Pentacole' },
+    { img: 'minor_arcana_pentacles_page.jpg',   nume: 'Paj de Pentacole' },
+    { img: 'minor_arcana_pentacles_knight.jpg', nume: 'Cavaler de Pentacole' },
+    { img: 'minor_arcana_pentacles_queen.jpg',  nume: 'Regina de Pentacole' },
+    { img: 'minor_arcana_pentacles_king.jpg',   nume: 'Regele de Pentacole' },
+    { img: 'minor_arcana_swords_ace.jpg',    nume: 'Asul de Săbii' },
+    { img: 'minor_arcana_swords_2.jpg',      nume: '2 de Săbii' },
+    { img: 'minor_arcana_swords_3.jpg',      nume: '3 de Săbii' },
+    { img: 'minor_arcana_swords_4.jpg',      nume: '4 de Săbii' },
+    { img: 'minor_arcana_swords_5.jpg',      nume: '5 de Săbii' },
+    { img: 'minor_arcana_swords_6.jpg',      nume: '6 de Săbii' },
+    { img: 'minor_arcana_swords_7.jpg',      nume: '7 de Săbii' },
+    { img: 'minor_arcana_swords_8.jpg',      nume: '8 de Săbii' },
+    { img: 'minor_arcana_swords_9.jpg',      nume: '9 de Săbii' },
+    { img: 'minor_arcana_swords_10.jpg',     nume: '10 de Săbii' },
+    { img: 'minor_arcana_swords_page.jpg',   nume: 'Paj de Săbii' },
+    { img: 'minor_arcana_swords_knight.jpg', nume: 'Cavaler de Săbii' },
+    { img: 'minor_arcana_swords_queen.jpg',  nume: 'Regina de Săbii' },
+    { img: 'minor_arcana_swords_king.jpg',   nume: 'Regele de Săbii' },
+    { img: 'minor_arcana_wands_ace.jpg',    nume: 'Asul de Bețe' },
+    { img: 'minor_arcana_wands_2.jpg',      nume: '2 de Bețe' },
+    { img: 'minor_arcana_wands_3.jpg',      nume: '3 de Bețe' },
+    { img: 'minor_arcana_wands_4.jpg',      nume: '4 de Bețe' },
+    { img: 'minor_arcana_wands_5.jpg',      nume: '5 de Bețe' },
+    { img: 'minor_arcana_wands_6.jpg',      nume: '6 de Bețe' },
+    { img: 'minor_arcana_wands_7.jpg',      nume: '7 de Bețe' },
+    { img: 'minor_arcana_wands_8.jpg',      nume: '8 de Bețe' },
+    { img: 'minor_arcana_wands_9.jpg',      nume: '9 de Bețe' },
+    { img: 'minor_arcana_wands_10.jpg',     nume: '10 de Bețe' },
+    { img: 'minor_arcana_wands_page.jpg',   nume: 'Paj de Bețe' },
+    { img: 'minor_arcana_wands_knight.jpg', nume: 'Cavaler de Bețe' },
+    { img: 'minor_arcana_wands_queen.jpg',  nume: 'Regina de Bețe' },
+    { img: 'minor_arcana_wands_king.jpg',   nume: 'Regele de Bețe' }
+];
+
+let cartiTrase = [];
+let categorieActiva = 'destin';
+let rotiriRamase = parseInt(localStorage.getItem('rotiri') ?? '2');
+
+// Init
+const params = new URLSearchParams(window.location.search);
+const cat = params.get('categorie') || 'destin';
+categorieActiva = CATEGORII[cat] ? cat : 'destin';
+
+const catData = CATEGORII[categorieActiva];
+document.getElementById('cat-icon').textContent = catData.icon;
+document.getElementById('cat-title').textContent = catData.titlu;
+
+// Rotiri
+function updateRotiri() {
+    const el = document.getElementById('rotiri-text');
+    if (rotiriRamase > 0) {
+        el.textContent = rotiriRamase === 1 ? '1 ședință gratuită rămasă' : rotiriRamase + ' ședințe gratuite rămase';
+    } else {
+        el.textContent = 'Ședințe gratuite epuizate';
+    }
+}
+updateRotiri();
+
+// Verificare rotiri
+if (rotiriRamase <= 0) {
+    document.getElementById('blocat-overlay').classList.add('activ');
+    document.getElementById('interpreta-btn').disabled = true;
+}
+
+// Tragere carte
+function trageCartea(nr) {
+    if (cartiTrase.includes(nr)) return;
+    if (rotiriRamase <= 0) return;
+
+    const indiciTrase = cartiTrase.map(n => parseInt(document.getElementById('img-' + n).dataset.idx || -1));
+    const cartiDisponibile = CARTI_TAROT.filter((_, i) => !indiciTrase.includes(i));
+    const randomIdx = Math.floor(Math.random() * cartiDisponibile.length);
+    const cartaTrasa = cartiDisponibile[randomIdx];
+    const originalIdx = CARTI_TAROT.indexOf(cartaTrasa);
+
+    document.getElementById('img-' + nr).src = cartaTrasa.img;
+    document.getElementById('img-' + nr).dataset.idx = originalIdx;
+    document.getElementById('img-' + nr).alt = cartaTrasa.nume;
+    document.getElementById('nume-' + nr).textContent = cartaTrasa.nume;
+    document.getElementById('carta-' + nr).classList.add('trasa');
+
+    cartiTrase.push(nr);
+
+    if (cartiTrase.length === 3) {
+        document.getElementById('tragere-hint').textContent = 'Cele 3 cărți au fost trase — revelează interpretarea';
+        document.getElementById('interpreta-btn').disabled = false;
+    } else {
+        document.getElementById('tragere-hint').textContent = (3 - cartiTrase.length) + ' carte(ți) rămase de tras';
+    }
+}
+
+// Interpretare AI
+const DEFINITII = {
+    'Nebunul': {
+        scurt: 'Începuturi noi, aventură, libertate',
+        text: 'Nebunul îți aduce un suflu de libertate și curaj. Ești la pragul unui nou început — poate o călătorie, o decizie îndrăzneață sau o schimbare neașteptată. Nu te teme de necunoscut. Universul îți spune să faci primul pas cu inima deschisă.'
+    },
+    'Magicianul': {
+        scurt: 'Voință, putere, manifestare',
+        text: 'Magicianul îți reamintește că ai toate instrumentele necesare pentru a-ți îndeplini dorințele. Voința ta este puternică acum. Este momentul să acționezi, să transformi gândurile în realitate. Puterea de a crea schimbarea se află în mâinile tale.'
+    },
+    'Înalta Preoteasă': {
+        scurt: 'Intuiție, mister, înțelepciune interioară',
+        text: 'Înalta Preoteasă îți șoptește să asculți vocea interioară. Răspunsurile pe care le cauți nu se găsesc în exterior — ele se află adânc în tine. Încrede-te în intuiția ta, în visele tale, în senzațiile pe care le simți dar nu le poți explica.'
+    },
+    'Împărăteasa': {
+        scurt: 'Abundență, fertilitate, natura, creativitate',
+        text: 'Împărăteasa aduce cu ea belșug și creativitate. Este timpul să îmbrățișezi frumusețea vieții, să cultivi ceea ce iubești. Relațiile, proiectele creative și bunăstarea sunt favorizate. Lasă natura să te ghideze spre creștere și prosperitate.'
+    },
+    'Împăratul': {
+        scurt: 'Autoritate, stabilitate, structură, control',
+        text: 'Împăratul îți cere să îți asumi controlul situației cu fermitate și înțelepciune. Este momentul disciplinei și al planificării. Stabilitatea vine din ordine și determinare. Nu ezita să stabilești limite clare și să conduci cu autoritate.'
+    },
+    'Papa': {
+        scurt: 'Tradiție, spiritualitate, ghidare, credință',
+        text: 'Papa îți indică să cauți înțelepciunea în tradiție și credință. Poate un mentor, un sfătuitor sau propria ta conștiință spirituală îți oferă ghidare în acest moment. Ascultă cu umilință și deschide-te la lecțiile pe care viața ți le oferă.'
+    },
+    'Îndrăgostiții': {
+        scurt: 'Dragoste, alegere, uniune, valori',
+        text: 'Îndrăgostiții vorbesc despre o alegere importantă din inimă. Fie că este vorba de dragoste, de o relație sau de o decizie de viață, urmează-ți valorile profunde. Conexiunea autentică și iubirea sinceră sunt cele care te vor ghida spre fericire.'
+    },
+    'Carul': {
+        scurt: 'Victorie, determinare, control, succes',
+        text: 'Carul îți aduce energie de victorie și determinare. Ești pe drumul cel bun — nu te opri acum. Concentrează-ți voința, controlează forțele opuse din viața ta și avansează cu curaj. Succesul îți aparține dacă rămâi focusat și hotărât.'
+    },
+    'Forța': {
+        scurt: 'Curaj interior, răbdare, compasiune, putere',
+        text: 'Forța nu vine din mușchi, ci din suflet. Această carte îți amintește că ai o putere interioară imensă — curajul blând, răbdarea și compasiunea sunt armele tale cele mai puternice. Abordează provocările cu calm și deschidere.'
+    },
+    'Ermitul': {
+        scurt: 'Introspecție, singurătate, căutare spirituală',
+        text: 'Ermitul îți invită sufletul la o călătorie interioară. Este momentul să te retragi din zgomotul lumii și să cauți răspunsuri în tăcere. Meditația, reflecția și singurătatea productivă îți vor lumina calea. Înțelepciunea vine din interior.'
+    },
+    'Roata Fortunei': {
+        scurt: 'Schimbare, cicluri, destin, șansă',
+        text: 'Roata Fortunei se întoarce — și cu ea vine schimbarea. Ce a fost sus va coborî, ce a fost jos va urca. Acceptă fluxul vieții cu grație. Destinul îți aduce o cotitură importantă. Fii pregătit să îmbrățișezi noile oportunități care apar.'
+    },
+    'Dreptatea': {
+        scurt: 'Echilibru, adevăr, lege, cauză și efect',
+        text: 'Dreptatea îți cere să privești situația cu ochii echilibrului și ai adevărului. Fiecare acțiune are consecințele ei. Acum este momentul să fii sincer cu tine însuți și cu ceilalți. Echilibrul se va restabili — dar necesită onestitate și responsabilitate.'
+    },
+    'Spânzuratul': {
+        scurt: 'Suspendare, sacrificiu, perspectivă nouă',
+        text: 'Spânzuratul îți cere să privești lumea dintr-un unghi complet diferit. Poate trebuie să renunți la ceva, să faci un sacrificiu sau să accepți o perioadă de așteptare. Această pauză nu este pierdere — este o invitație la iluminare și perspectivă nouă.'
+    },
+    'Moartea': {
+        scurt: 'Transformare, sfârșit și început, schimbare profundă',
+        text: 'Moartea în tarot nu înseamnă moarte fizică — înseamnă o transformare profundă. Ceva din viața ta se încheie pentru a face loc la ceva nou. Nu te agăța de ce a fost. Lasă trecutul să plece cu grație și îmbrățișează renașterea care urmează.'
+    },
+    'Temperanța': {
+        scurt: 'Echilibru, răbdare, moderație, vindecare',
+        text: 'Temperanța îți aduce energia vindecării și a echilibrului. Este momentul să îmbini energiile opuse din viața ta cu înțelepciune. Răbdarea și moderația sunt cheia. Nu te grăbi — lasă lucrurile să se dezvolte organic, în ritmul lor natural.'
+    },
+    'Diavolul': {
+        scurt: 'Dependență, iluzie, materialism, lanțuri',
+        text: 'Diavolul îți arată lanțurile pe care singur ți le-ai pus. Poate o dependență, o relație toxică sau o gândire limitativă te ține captiv. Vestea bună: lanțurile sunt mai slabe decât crezi. Conștientizarea este primul pas spre eliberare.'
+    },
+    'Turnul': {
+        scurt: 'Haos brusc, revelație, dezintegrare necesară',
+        text: 'Turnul aduce schimbare bruscă și neașteptată — poate o revelație care zguduie fundații false. Deși poate părea distructiv, Turnul curăță ce nu mai servește. Din ruine se naște ceva mai autentic și mai solid. Acceptă transformarea cu curaj.'
+    },
+    'Steaua': {
+        scurt: 'Speranță, inspirație, vindecare, ghidare divină',
+        text: 'Steaua îți aduce speranță și lumină după întuneric. Ești ghidat și protejat de forțe mai mari. Este momentul să visezi din nou, să te vindeci și să ai încredere că lucrurile se vor îmbunătăți. Universul îți trimite un semn de încurajare.'
+    },
+    'Luna': {
+        scurt: 'Iluzie, frică, subconștient, confuzie',
+        text: 'Luna iluminează umbrele subconștientului tău. Lucruri ascunse, temeri vechi sau iluzii îți pot tulbura judecata în acest moment. Nu te lăsa dus de aparențe. Privește dincolo de suprafață, ascultă-ți visele și lasă frica să se transforme în înțelepciune.'
+    },
+    'Soarele': {
+        scurt: 'Bucurie, succes, vitalitate, claritate',
+        text: 'Soarele strălucește asupra ta cu energie pură de bucurie și succes! Este una dintre cele mai pozitive cărți din tarot. Claritate, vitalitate și fericire îți sunt la îndemână. Îmbrățișează această energie luminoasă și lasă-te purtat de valul de optimism și reușită.'
+    },
+    'Judecata': {
+        scurt: 'Reînnoire, chemare, absolvire, evaluare',
+        text: 'Judecata te cheamă să îți evaluezi viața cu onestitate și să îmbrățișezi o reînnoire profundă. Poate auzi o chemare interioară — o vocație, o misiune sau o dorință de schimbare radicală. Este momentul să lași în urmă trecutul și să renaști în versiunea ta cea mai autentică.'
+    },
+    'Lumea': {
+        scurt: 'Completare, integrare, realizare, ciclu complet',
+        text: 'Lumea marchează finalizarea unui ciclu important al vieții tale. Ai parcurs un drum lung și ai câștigat înțelepciune prețioasă. Celebrează realizările tale! Ești complet și pregătit pentru un nou ciclu. Totul s-a împlinit exact cum trebuia.'
+    }
+};
+
+function genereazaInterpretare(carta1, carta2, carta3, categorie, intrebare) {
+    const def1 = DEFINITII[carta1];
+    const def2 = DEFINITII[carta2];
+    const def3 = DEFINITII[carta3];
+
+    const energii = {
+        dragoste: 'În dragoste și relații',
+        bani: 'În plan financiar',
+        sanatate: 'Pentru sănătatea ta',
+        cariera: 'În carieră și profesie',
+        destin: 'Pe calea destinului tău'
+    };
+
+    const intro = energii[categorie] || 'În această privință';
+
+    // Combinatii speciale pentru anumite carti
+    let mesajSpecial = '';
+    const carti = [carta1, carta2, carta3];
+    
+    if (carti.includes('Soarele') && carti.includes('Steaua')) {
+        mesajSpecial = 'Prezența Soarelui și a Stelei împreună este un semn extrem de favorabil — energia universului lucrează puternic în favoarea ta. ';
+    } else if (carti.includes('Turnul') && carti.includes('Moartea')) {
+        mesajSpecial = 'Prezența Turnului și a Morții indică o transformare majoră și inevitabilă — dar din cenușă se naște phoenixul. ';
+    } else if (carti.includes('Îndrăgostiții') && carti.includes('Împărăteasa')) {
+        mesajSpecial = 'Îndrăgostiții alături de Împărăteasă vorbesc despre o iubire profundă și roditoare. ';
+    } else if (carti.includes('Diavolul') && carti.includes('Spânzuratul')) {
+        mesajSpecial = 'Diavolul și Spânzuratul împreună sugerează că eliberarea vine prin schimbarea perspectivei și curajul de a renunța. ';
+    } else if (carti.includes('Lumea') || carti.includes('Soarele')) {
+        mesajSpecial = 'Energia acestei trageri este una de succes și împlinire. ';
+    }
+
+    return `${intro}, cărțile tale vorbesc cu claritate.
+
+🃏 ${carta1} — ${def1.scurt}
+${def1.text}
+
+🃏 ${carta2} — ${def2.scurt}
+${def2.text}
+
+🃏 ${carta3} — ${def3.scurt}
+${def3.text}
+
+✦ Mesajul combinat al cărților tale:
+${mesajSpecial}Împreună, aceste trei cărți formează un mesaj clar: ${def1.scurt.toLowerCase()}, ${def2.scurt.toLowerCase()} și ${def3.scurt.toLowerCase()} sunt energiile dominante ale acestui moment. Lasă această înțelepciune să te ghideze pe calea ta.`;
+}
+
+function interpreteaza() {
+    const intrebare = document.getElementById('intrebare').value.trim();
+    if (!intrebare) {
+        alert('Scrie mai întâi întrebarea ta.');
+        return;
+    }
+
+    const carta1 = document.getElementById('nume-1').textContent;
+    const carta2 = document.getElementById('nume-2').textContent;
+    const carta3 = document.getElementById('nume-3').textContent;
+
+    document.getElementById('interpreta-btn').style.display = 'none';
+    document.getElementById('loading').classList.add('activ');
+
+    // Simulam o mica intarziere pentru efect mistic
+    setTimeout(() => {
+        const text = genereazaInterpretare(carta1, carta2, carta3, categorieActiva, intrebare);
+
+        document.getElementById('loading').classList.remove('activ');
+        document.getElementById('interpretare-text').textContent = text;
+        document.getElementById('interpretare-box').classList.add('activ');
+
+        // Scade rotiri
+        rotiriRamase = Math.max(0, rotiriRamase - 1);
+        localStorage.setItem('rotiri', rotiriRamase);
+        updateRotiri();
+
+        if (rotiriRamase <= 0) {
+            setTimeout(() => {
+                document.getElementById('blocat-overlay').classList.add('activ');
+            }, 2000);
+        }
+    }, 2000);
+}
+    if (rotiriRamase <= 0) {
+        document.getElementById('blocat-overlay').classList.add('activ');
+        return;
+    }
+    cartiTrase = [];
+    for (let i = 1; i <= 3; i++) {
+        document.getElementById('carta-' + i).classList.remove('trasa');
+        document.getElementById('img-' + i).src = '';
+        document.getElementById('img-' + i).dataset.idx = '';
+        document.getElementById('nume-' + i).textContent = '';
+    }
+    document.getElementById('intrebare').value = '';
+    document.getElementById('interpretare-box').classList.remove('activ');
+    document.getElementById('interpreta-btn').style.display = 'block';
+    document.getElementById('interpreta-btn').disabled = true;
+    document.getElementById('tragere-hint').textContent = 'Apasă pe fiecare carte pentru a o întoarce';
+}
+
+// Stele
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--op:${0.2+Math.random()*0.5};width:${1+Math.random()*1.5}px;height:${1+Math.random()*1.5}px;`;
+    starsContainer.appendChild(star);
+}
+</script>
+
+</body>
+</html>
