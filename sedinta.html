@@ -1,3 +1,8 @@
+bash
+
+cat /mnt/user-data/outputs/sedinta.html
+Output
+
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -844,9 +849,13 @@ const DEFINITII = {
 };
 
 function genereazaInterpretare(carta1, carta2, carta3, categorie, intrebare) {
-    const def1 = DEFINITII[carta1];
-    const def2 = DEFINITII[carta2];
-    const def3 = DEFINITII[carta3];
+    const fallback = {
+        scurt: 'Energie misterioasă',
+        text: 'Această carte îți aduce o energie aparte în acest moment. Ascultă-ți intuiția și lasă mesajul să se dezvăluie în propria ta inimă.'
+    };
+    const def1 = DEFINITII[carta1] || fallback;
+    const def2 = DEFINITII[carta2] || fallback;
+    const def3 = DEFINITII[carta3] || fallback;
 
     const energii = {
         dragoste: 'În dragoste și relații',
@@ -955,3 +964,10 @@ for (let i = 0; i < 100; i++) {
 
 </body>
 </html>
+Done
+Acum selectează tot textul de mai sus — de la <!DOCTYPE html> până la </html> — copiază-l și lipește-l în editorul GitHub! Apoi Commit changes. 🔮
+
+
+
+
+
