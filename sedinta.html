@@ -700,7 +700,7 @@ const CARTI_TAROT = [
 
 let cartiTrase = [];
 let categorieActiva = 'destin';
-let rotiriRamase = parseInt(localStorage.getItem('rotiri') ?? '2');
+let rotiriRamase = parseInt(localStorage.getItem('rotiri') || '10');
 
 // Init
 const params = new URLSearchParams(window.location.search);
